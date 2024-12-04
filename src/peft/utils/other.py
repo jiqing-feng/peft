@@ -648,6 +648,8 @@ def get_gptqmodel_quant_linear(gptq_quantization_config, device_map=None):
 
     if not is_gptqmodel_available():
         return None
+    
+    from gptqmodel.utils.importer import hf_select_quant_linear
 
     desc_act = gptq_quantization_config.desc_act
     group_size = gptq_quantization_config.group_size
