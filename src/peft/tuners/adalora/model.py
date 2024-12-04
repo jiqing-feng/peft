@@ -25,7 +25,7 @@ from peft.utils import (
     _freeze_adapter,
     _get_submodules,
     get_auto_gptq_quant_linear,
-    get_gptq_quant_linear,
+    get_gptqmodel_quant_linear,
     get_quantization_config,
 )
 from peft.import_utils import is_gptqmodel_available
@@ -164,7 +164,7 @@ class AdaLoraModel(LoraModel):
         gptq_quantization_config = kwargs.get("gptq_quantization_config", None)
 
         if is_gptqmodel_available():
-            GPTQQuantLinear = get_gptq_quant_linear(gptq_quantization_config, self.model.hf_device_map)
+            GPTQQuantLinear = get_gptqmodel_quant_linear(gptq_quantization_config, self.model.hf_device_map)
         else:
             GPTQQuantLinear = get_auto_gptq_quant_linear(gptq_quantization_config)
 

@@ -639,7 +639,7 @@ def get_auto_gptq_quant_linear(gptq_quantization_config):
     return quant_linear
 
 
-def get_gptq_quant_linear(gptq_quantization_config, device_map=None):
+def get_gptqmodel_quant_linear(gptq_quantization_config, device_map=None):
     """
     Get the right GPTQQuantLinear class based on the quantization config file
     """
