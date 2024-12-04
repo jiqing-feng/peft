@@ -643,6 +643,26 @@ def get_auto_gptq_quant_linear(gptq_quantization_config):
     return AutoGPTQQuantLinear
 
 
+def get_gptq_quant_linear(gptq_quantization_config, device_map=None):
+    """
+    Get the right GPTQQuantLinear class based on the quantization config file
+    """
+    if gptq_quantization_config is None:
+        return None
+
+    if not is_gptqmodel_available():
+        return None
+
+    desc_act = gptq_quantization_config.desc_act
+    group_size = gptq_quantization_config.group_size
+    bits = gptq_quantization_config.bits
+    sym = gptq_quantization_config.sym
+    meta = gptq_quantization_config.meta if hasattr(gptq_quantization_config, "meta") else None
+    GPTQQuantLinear = hf_select_quant_linear(bits=bits, group_size=group_size, desc_act=desc_act, sym=sym, device_map=device_map, meta=meta)
+
+    return GPTQQuantLinear
+
+
 def id_tensor_storage(tensor: torch.Tensor) -> tuple[torch.device, int, int]:
     """
     Unique identifier to a tensor storage. Multiple different tensors can share the same underlying storage. For
