@@ -164,9 +164,9 @@ class AdaLoraModel(LoraModel):
         gptq_quantization_config = kwargs.get("gptq_quantization_config", None)
 
         if is_gptqmodel_available():
-            GPTQQuantLinear = get_gptqmodel_quant_linear(gptq_quantization_config, self.model.hf_device_map)
+            QuantLinear = get_gptqmodel_quant_linear(gptq_quantization_config, self.model.hf_device_map)
         else:
-            GPTQQuantLinear = get_auto_gptq_quant_linear(gptq_quantization_config)
+            QuantLinear = get_auto_gptq_quant_linear(gptq_quantization_config)
 
         loaded_in_8bit = kwargs.pop("loaded_in_8bit", False)
         loaded_in_4bit = kwargs.pop("loaded_in_4bit", False)
@@ -196,7 +196,7 @@ class AdaLoraModel(LoraModel):
                 }
             )
             new_module = SVDLinear4bit(target, adapter_name, **fourbit_kwargs)
-        elif GPTQQuantLinear is not None and isinstance(target, GPTQQuantLinear):
+        elif QuantLinear is not None and isinstance(target, QuantLinear):
             new_module = SVDQuantLinear(target, adapter_name, **kwargs)
         else:
             if isinstance(target_base_layer, torch.nn.Linear):

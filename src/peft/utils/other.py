@@ -627,7 +627,7 @@ def get_auto_gptq_quant_linear(gptq_quantization_config):
     else:
         exllama_version = 1
 
-    quant_linear = dynamically_import_QuantLinear(
+    QuantLinear = dynamically_import_QuantLinear(
         use_triton=False,
         desc_act=desc_act,
         group_size=group_size,
@@ -636,7 +636,7 @@ def get_auto_gptq_quant_linear(gptq_quantization_config):
         disable_exllamav2=not (use_exllama and exllama_version == 2),
     )
 
-    return quant_linear
+    return QuantLinear
 
 
 def get_gptqmodel_quant_linear(gptq_quantization_config, device_map=None):
@@ -655,9 +655,9 @@ def get_gptqmodel_quant_linear(gptq_quantization_config, device_map=None):
     sym = gptq_quantization_config.sym
     meta = gptq_quantization_config.meta if hasattr(gptq_quantization_config, "meta") else None
 
-    quant_linear = hf_select_quant_linear(bits=bits, group_size=group_size, desc_act=desc_act, sym=sym, device_map=device_map, meta=meta)
+    QuantLinear = hf_select_quant_linear(bits=bits, group_size=group_size, desc_act=desc_act, sym=sym, device_map=device_map, meta=meta)
 
-    return quant_linear
+    return QuantLinear
 
 
 def id_tensor_storage(tensor: torch.Tensor) -> tuple[torch.device, int, int]:
