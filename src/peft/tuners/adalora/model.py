@@ -137,7 +137,7 @@ class AdaLoraModel(LoraModel):
 
         # If it is not an AdaLoraLayer, create a new module, else update it with new adapters
         if not isinstance(target, AdaLoraLayer):
-            new_module = self._create_new_module(lora_config, adapter_name, target, **kwargs)
+            new_module = self._create_new_module(lora_config, adapter_name, target, self.model.hf_device_map, **kwargs)
             if adapter_name not in self.active_adapters:
                 # adding an additional adapter: it is not automatically trainable
                 new_module.requires_grad_(False)
@@ -152,7 +152,7 @@ class AdaLoraModel(LoraModel):
             )
 
     @staticmethod
-    def _create_new_module(lora_config, adapter_name, target, **kwargs):
+    def _create_new_module(lora_config, adapter_name, target, device_map, **kwargs):
         # avoid eager bnb import
         if is_bnb_available():
             import bitsandbytes as bnb
@@ -164,7 +164,7 @@ class AdaLoraModel(LoraModel):
         gptq_quantization_config = kwargs.get("gptq_quantization_config", None)
 
         if is_gptqmodel_available():
-            QuantLinear = get_gptqmodel_quant_linear(gptq_quantization_config, self.model.hf_device_map)
+            QuantLinear = get_gptqmodel_quant_linear(gptq_quantization_config, device_map)
         else:
             QuantLinear = get_auto_gptq_quant_linear(gptq_quantization_config)
 
