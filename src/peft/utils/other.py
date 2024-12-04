@@ -612,8 +612,6 @@ def get_auto_gptq_quant_linear(gptq_quantization_config):
 
     if is_auto_gptq_available():
         from auto_gptq.utils.import_utils import dynamically_import_QuantLinear
-    elif is_gptqmodel_available():
-        from gptqmodel.utils.importer import hf_select_quant_linear
     else:
         return None
 
@@ -637,8 +635,6 @@ def get_auto_gptq_quant_linear(gptq_quantization_config):
             disable_exllama=not (use_exllama and exllama_version == 1),
             disable_exllamav2=not (use_exllama and exllama_version == 2),
         )
-    elif is_gptqmodel_available():
-        AutoGPTQQuantLinear = hf_select_quant_linear(bits=bits, group_size=group_size, desc_act=desc_act, sym=True)
 
     return AutoGPTQQuantLinear
 
