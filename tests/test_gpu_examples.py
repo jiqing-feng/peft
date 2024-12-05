@@ -70,7 +70,6 @@ from peft import (
     replace_lora_weights_loftq,
     set_peft_model_state_dict,
 )
-from peft.import_utils import is_gptqmodel_available
 from peft.tuners import boft
 from peft.utils import SAFETENSORS_WEIGHTS_NAME, infer_device
 from peft.utils.loftq_utils import NFQuantizer
@@ -1382,11 +1381,7 @@ class PeftGPTQTests(unittest.TestCase):
         from transformers import GPTQConfig
 
         self.causal_lm_model_id = "marcsun13/opt-350m-gptq-4bit"
-        # TODO : check if it works for Exllamav2 kernels
-        if is_gptqmodel_available():
-            self.quantization_config = GPTQConfig(bits=4, backend="auto_trainable")
-        else:
-            self.quantization_config = GPTQConfig(bits=4, use_exllama=False)
+        self.quantization_config = GPTQConfig(bits=4, backend="auto_trainable")
         self.tokenizer = AutoTokenizer.from_pretrained(self.causal_lm_model_id)
 
     def tearDown(self):
