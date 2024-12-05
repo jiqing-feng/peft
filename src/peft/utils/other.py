@@ -660,7 +660,7 @@ def get_gptqmodel_quant_linear(gptq_quantization_config, device_map=None):
 
     QuantLinear = hf_select_quant_linear(bits=bits, group_size=group_size,
                                          desc_act=desc_act, sym=sym, device_map=device_map,
-                                         checkpoint_format=checkpoint_format, meta=meta)
+                                         checkpoint_format=checkpoint_format, meta=meta, backend="auto_trainable")
 
     return QuantLinear
 
